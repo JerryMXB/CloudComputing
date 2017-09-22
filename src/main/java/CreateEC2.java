@@ -31,10 +31,11 @@ public class CreateEC2 {
                             "location, and is in valid format.", e);
         }
 
+        Regions region = Regions.US_EAST_1;
         // Create the AmazonEC2Client
         AmazonEC2 ec2 = AmazonEC2ClientBuilder.standard()
                 .withCredentials(credentials)
-                .withRegion(Regions.US_EAST_1)
+                .withRegion(region)
                 .build();
 
         // Create a key pair
@@ -96,6 +97,7 @@ public class CreateEC2 {
 
         while (publicIp == null) {
             DescribeInstancesResult result = ec2.describeInstances(request);
+
             List<Reservation> reservations = result.getReservations();
             publicIp = reservations.get(0).getInstances().get(0).getPublicIpAddress();
             count++;
@@ -108,7 +110,6 @@ public class CreateEC2 {
         }
 
         System.out.println("\nThe public ip is :" + publicIp + "\nThe instanceId is:" +
-                instanceId + "\nThe imageId is:" + instance.getImageId());
-
+                instanceId + "\nThe region is:" + region.getName());
     }
 }
